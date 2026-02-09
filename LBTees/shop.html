@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop All | LB Tees</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-black: #1a1a1a;
+            --brand-white: #ffffff;
+            --brand-gray: #f4f4f4;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--brand-white);
+            color: var(--brand-black);
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--brand-black);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .product-card img {
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+        .announcement-bar {
+            background-color: var(--brand-black);
+            color: white;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #eee;
+        }
+        #cart-drawer {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #cart-drawer.open {
+            transform: translateX(0);
+        }
+        .overlay {
+            display: none;
+            background: rgba(0,0,0,0.5);
+            position: fixed;
+            inset: 0;
+            z-index: 90;
+        }
+        .overlay.active {
+            display: block;
+        }
+        /* Active filter styles */
+        .filter-btn-active {
+            background-color: black !important;
+            color: white !important;
+        }
+        .category-link-active {
+            text-decoration: underline;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar py-2 text-center">
+        Free Shipping on all Canadian orders over $100
+    </div>
+
+    <!-- Header -->
+    <header class="sticky-header">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <button class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></button>
+            </button>
+
+            <nav class="hidden md:flex space-x-8 uppercase text-xs font-semibold tracking-widest">
+                <a href="shop-all.html" class="nav-link active">Shop All</a>
+                <a href="lb-tees-theme.html" class="nav-link">New Arrivals</a>
+                <a href="#" class="nav-link">Collections</a>
+            </nav>
+
+            <div class="text-2xl font-bold tracking-tighter">
+                <a href="lb-tees-theme.html">LB<span class="text-gray-400">TEES</span></a>
+            </div>
+
+            <div class="flex items-center space-x-5">
+                <a href="#" class="hover:opacity-60 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </a>
+                <button onclick="toggleCart()" class="hover:opacity-60 transition-opacity relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Collection Header -->
+    <section class="pt-16 pb-8 border-b">
+        <div class="container mx-auto px-6">
+            <nav class="text-[10px] uppercase tracking-widest text-gray-400 mb-4">
+                <a href="lb-tees-theme.html" class="hover:text-black">Home</a> / <span class="text-black">Shop All</span>
+            </nav>
+            <h1 class="text-4xl md:text-5xl mb-4">Shop All Products</h1>
+            <p class="text-gray-500 max-w-2xl text-sm leading-relaxed">Explore our full range of premium essentials. Crafted with precision and made to be worn every single day.</p>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-6 py-12 flex flex-col md:flex-row gap-12">
+        
+        <!-- Sidebar Filters -->
+        <aside class="hidden md:block w-64 space-y-10">
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-widest mb-6 pb-2 border-b">Category</h4>
+                <ul class="space-y-3 text-sm" id="category-filters">
+                    <li><button data-cat="all" class="category-link category-link-active hover:underline">All Products</button></li>
+                    <li><button data-cat="T-Shirts" class="category-link hover:underline">T-Shirts</button></li>
+                    <li><button data-cat="Long Sleeves" class="category-link hover:underline">Long Sleeves</button></li>
+                    <li><button data-cat="Hoodies" class="category-link hover:underline">Hoodies</button></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-widest mb-6 pb-2 border-b">Size</h4>
+                <div class="grid grid-cols-4 gap-2" id="size-filters">
+                    <button data-size="XS" class="border py-2 text-[10px] hover:bg-black hover:text-white transition-colors">XS</button>
+                    <button data-size="S" class="border py-2 text-[10px] hover:bg-black hover:text-white transition-colors">S</button>
+                    <button data-size="M" class="border py-2 text-[10px] hover:bg-black hover:text-white transition-colors">M</button>
+                    <button data-size="L" class="border py-2 text-[10px] hover:bg-black hover:text-white transition-colors">L</button>
+                    <button data-size="XL" class="border py-2 text-[10px] hover:bg-black hover:text-white transition-colors">XL</button>
+                    <button data-size="2XL" class="border py-2 text-[10px] hover:bg-black hover:text-white transition-colors">2XL</button>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-widest mb-6 pb-2 border-b">Price Range</h4>
+                <div class="space-y-3 text-sm" id="price-filters">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="p-under-40" data-max="40" class="cursor-pointer">
+                        <label for="p-under-40" class="cursor-pointer">Under $40</label>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="p-over-40" data-min="40" class="cursor-pointer">
+                        <label for="p-over-40" class="cursor-pointer">$40 and above</label>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="clear-filters" class="text-[10px] uppercase font-bold tracking-widest text-red-500 hover:underline">Clear All Filters</button>
+        </aside>
+
+        <!-- Product List -->
+        <div class="flex-grow">
+            <!-- Toolbar -->
+            <div class="flex justify-between items-center mb-10 pb-4 border-b">
+                <span id="product-count" class="text-xs text-gray-400 font-medium uppercase tracking-tighter">Showing 0 Products</span>
+                <div class="flex items-center space-x-4">
+                    <span class="text-[10px] uppercase font-bold tracking-widest text-gray-400">Sort By</span>
+                    <select id="sort-dropdown" class="text-sm bg-transparent focus:outline-none cursor-pointer font-medium">
+                        <option value="newest">Newest</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="popular">Best Selling</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid -->
+            <div id="product-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-6">
+                <!-- Products dynamically injected here -->
+            </div>
+
+            <div id="no-results" class="hidden py-20 text-center">
+                <p class="text-gray-400 italic">No products match your current filters.</p>
+                <button onclick="resetFilters()" class="mt-4 text-xs font-bold underline uppercase tracking-widest">Reset All</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <h5 class="text-xl font-bold mb-6 italic serif">LB<span class="opacity-50">TEES</span></h5>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Redefining the basics for everyday life. Proudly based in Canada.</p>
+                </div>
+                <div>
+                    <h6 class="text-xs uppercase font-bold tracking-widest mb-6">Shop</h6>
+                    <ul class="text-gray-400 text-sm space-y-4">
+                        <li><a href="shop-all.html" class="hover:text-white transition-colors">All Products</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Bundles</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="text-xs uppercase font-bold tracking-widest mb-6">Support</h6>
+                    <ul class="text-gray-400 text-sm space-y-4">
+                        <li><a href="#" class="hover:text-white transition-colors">Track Order</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Shipping Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="text-xs uppercase font-bold tracking-widest mb-6">Newsletter</h6>
+                    <div class="flex">
+                        <input type="email" placeholder="Email address" class="bg-transparent border-b border-gray-700 py-2 w-full focus:outline-none focus:border-white transition-colors text-sm">
+                        <button class="border-b border-gray-700 px-4 hover:text-gray-400 uppercase text-[10px] font-bold">Join</button>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-10 border-t border-gray-800 text-[10px] text-gray-500 uppercase tracking-widest text-center">
+                <p>&copy; 2024 LB Tees. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div id="cart-overlay" class="overlay" onclick="toggleCart()"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-sm bg-white z-[100] shadow-2xl flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center">
+            <h3 class="text-xl font-bold uppercase tracking-tight">Your Cart</h3>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-black">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-6">
+            <p id="empty-cart-msg" class="text-center text-gray-400 mt-20 uppercase text-[10px] tracking-widest font-bold">Your cart is empty</p>
+        </div>
+        <div class="p-6 border-t bg-gray-50">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-xs font-bold uppercase tracking-widest">Subtotal</span>
+                <span id="cart-total" class="text-lg font-bold">$0.00</span>
+            </div>
+            <button class="w-full bg-black text-white py-4 text-xs font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        // --- PRODUCT DATA ---
+        const products = [
+            { id: 1, name: 'Essential White Tee', price: 38.00, category: 'T-Shirts', sizes: ['S', 'M', 'L', 'XL'], popularity: 95, date: '2024-01-10', img: 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=800' },
+            { id: 2, name: 'Heavyweight Black Tee', price: 42.00, category: 'T-Shirts', sizes: ['M', 'L', 'XL', '2XL'], popularity: 88, date: '2024-02-15', img: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=800' },
+            { id: 3, name: 'Vintage Gray Tee', price: 45.00, category: 'T-Shirts', sizes: ['XS', 'S', 'M'], popularity: 70, date: '2024-03-01', img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800' },
+            { id: 4, name: 'Boxy Fit Charcoal', price: 40.00, category: 'T-Shirts', sizes: ['S', 'M', 'L'], popularity: 82, date: '2024-01-20', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=800' },
+            { id: 5, name: 'Pocket Tee Olive', price: 35.00, category: 'T-Shirts', sizes: ['M', 'L', 'XL'], popularity: 65, date: '2023-12-15', img: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=800' },
+            { id: 6, name: 'Sandstone Oversized', price: 48.00, category: 'T-Shirts', sizes: ['L', 'XL', '2XL'], popularity: 92, date: '2024-03-10', img: 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=800' },
+            { id: 7, name: 'Classic Long Sleeve', price: 55.00, category: 'Long Sleeves', sizes: ['S', 'M', 'L'], popularity: 50, date: '2023-11-10', img: 'https://images.unsplash.com/photo-1611312449412-6cefac5dc3e4?q=80&w=800' },
+            { id: 8, name: 'Premium Black Hoodie', price: 85.00, category: 'Hoodies', sizes: ['M', 'L', 'XL', '2XL'], popularity: 99, date: '2024-03-25', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800' }
+        ];
+
+        // --- STATE ---
+        let filters = {
+            category: 'all',
+            sizes: [],
+            priceUnder40: false,
+            priceOver40: false
+        };
+        let currentSort = 'newest';
+        let cart = [];
+
+        // --- CORE LOGIC ---
+        function init() {
+            renderProducts();
+            setupEventListeners();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            const noResults = document.getElementById('no-results');
+            
+            // 1. Filter
+            let filtered = products.filter(p => {
+                const catMatch = filters.category === 'all' || p.category === filters.category;
+                const sizeMatch = filters.sizes.length === 0 || filters.sizes.some(s => p.sizes.includes(s));
+                
+                let priceMatch = true;
+                if (filters.priceUnder40 && filters.priceOver40) priceMatch = true;
+                else if (filters.priceUnder40) priceMatch = p.price < 40;
+                else if (filters.priceOver40) priceMatch = p.price >= 40;
+
+                return catMatch && sizeMatch && priceMatch;
+            });
+
+            // 2. Sort
+            filtered.sort((a, b) => {
+                if (currentSort === 'price-low') return a.price - b.price;
+                if (currentSort === 'price-high') return b.price - a.price;
+                if (currentSort === 'popular') return b.popularity - a.popularity;
+                return new Date(b.date) - new Date(a.date); // newest
+            });
+
+            // 3. Render
+            grid.innerHTML = '';
+            document.getElementById('product-count').innerText = `Showing ${filtered.length} Products`;
+
+            if (filtered.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                filtered.forEach(p => {
+                    const card = `
+                        <div class="product-card group animate-fade-in">
+                            <div class="relative overflow-hidden aspect-[3/4] bg-gray-50 mb-4">
+                                <img src="${p.img}" class="w-full h-full object-cover">
+                                <button onclick="addToCart('${p.name}', ${p.price})" class="absolute bottom-4 left-4 right-4 bg-white py-3 text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">Quick Add</button>
+                                ${p.popularity > 90 ? '<div class="absolute top-4 left-4 bg-black text-white px-2 py-1 text-[10px] uppercase font-bold tracking-tighter">Best Seller</div>' : ''}
+                            </div>
+                            <h4 class="text-sm font-medium mb-1 uppercase tracking-tight">${p.name}</h4>
+                            <p class="text-gray-500 text-sm">$${p.price.toFixed(2)}</p>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+            }
+        }
+
+        function setupEventListeners() {
+            // Category Links
+            document.querySelectorAll('#category-filters button').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.category-link').forEach(l => l.classList.remove('category-link-active'));
+                    btn.classList.add('category-link-active');
+                    filters.category = btn.dataset.cat;
+                    renderProducts();
+                };
+            });
+
+            // Size Buttons
+            document.querySelectorAll('#size-filters button').forEach(btn => {
+                btn.onclick = () => {
+                    const size = btn.dataset.size;
+                    if (filters.sizes.includes(size)) {
+                        filters.sizes = filters.sizes.filter(s => s !== size);
+                        btn.classList.remove('filter-btn-active');
+                    } else {
+                        filters.sizes.push(size);
+                        btn.classList.add('filter-btn-active');
+                    }
+                    renderProducts();
+                };
+            });
+
+            // Price Checkboxes
+            document.getElementById('p-under-40').onchange = (e) => {
+                filters.priceUnder40 = e.target.checked;
+                renderProducts();
+            };
+            document.getElementById('p-over-40').onchange = (e) => {
+                filters.priceOver40 = e.target.checked;
+                renderProducts();
+            };
+
+            // Sort Dropdown
+            document.getElementById('sort-dropdown').onchange = (e) => {
+                currentSort = e.target.value;
+                renderProducts();
+            };
+
+            // Clear All
+            document.getElementById('clear-filters').onclick = resetFilters;
+        }
+
+        function resetFilters() {
+            filters = { category: 'all', sizes: [], priceUnder40: false, priceOver40: false };
+            
+            // Reset UI
+            document.querySelectorAll('.category-link').forEach(l => l.classList.remove('category-link-active'));
+            document.querySelector('[data-cat="all"]').classList.add('category-link-active');
+            document.querySelectorAll('#size-filters button').forEach(b => b.classList.remove('filter-btn-active'));
+            document.querySelectorAll('#price-filters input').forEach(i => i.checked = false);
+            
+            renderProducts();
+        }
+
+        // --- CART LOGIC ---
+        function toggleCart() {
+            document.getElementById('cart-drawer').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('active');
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price, id: Date.now() });
+            updateCart();
+            if (!document.getElementById('cart-drawer').classList.contains('open')) toggleCart();
+        }
+
+        function updateCart() {
+            const container = document.getElementById('cart-items');
+            const totalSpan = document.getElementById('cart-total');
+            const countSpan = document.getElementById('cart-count');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            
+            container.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                container.appendChild(emptyMsg);
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    const el = document.createElement('div');
+                    el.className = 'flex justify-between items-start';
+                    el.innerHTML = `
+                        <div>
+                            <h5 class="text-xs font-bold uppercase tracking-tight">${item.name}</h5>
+                            <button onclick="removeFromCart(${index})" class="text-[9px] uppercase text-red-400 mt-2 font-bold hover:underline">Remove</button>
+                        </div>
+                        <span class="text-sm font-semibold">$${item.price.toFixed(2)}</span>
+                    `;
+                    container.appendChild(el);
+                });
+            }
+
+            totalSpan.innerText = `$${total.toFixed(2)}`;
+            countSpan.innerText = cart.length;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        // Run on load
+        window.onload = init;
+    </script>
+</body>
+</html>
