@@ -1,1 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRTC WebDev Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b; /* Zinc 950 */
+            color: #f4f4f5; /* Zinc 100 */
+        }
 
+        .project-button {
+            background: #18181b; /* Zinc 900 */
+            border: 1px solid #27272a; /* Zinc 800 */
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .project-button:hover {
+            background: #27272a;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+        }
+
+        .project-button:active {
+            transform: translateY(0);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6 sm:p-12 relative">
+
+    <!-- Top Right Navigation -->
+    <div class="absolute top-6 right-6">
+        <a href="https://drtc.net" class="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-sm font-medium text-zinc-400 hover:text-white hover:border-zinc-700 hover:bg-zinc-800 transition-all">
+            Back To DRTC.net
+            <i class="fas fa-arrow-right text-xs"></i>
+        </a>
+    </div>
+
+    <!-- Header Section -->
+    <div class="w-full max-w-5xl text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+            <span class="gradient-text">DRTC</span> WebDev Portal
+        </h1>
+        <p class="text-zinc-400 text-lg max-w-2xl mx-auto">
+            Access our active development environments here.
+        </p>
+    </div>
+
+    <!-- Project Directory (Buttons) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-5xl" id="project-grid">
+        
+        <!-- Project 1 -->
+        <a href="https://example.drtc.net/lbtees.html" class="project-button p-5 rounded-2xl flex items-center gap-4 group">
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                <i class="fas fa-globe text-xl"></i>
+            </div>
+            <div class="flex-grow">
+                <h3 class="font-bold text-zinc-100">LBTees</h3>
+                <p class="text-xs text-zinc-500">New Updated Website</p>
+            </div>
+            <i class="fas fa-chevron-right text-zinc-700 group-hover:text-blue-500 transition-colors"></i>
+        </a>
+      
+    </div>
+
+</body>
+</html>
