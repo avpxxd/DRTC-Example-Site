@@ -1,1 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LB Tees | Premium Apparel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-black: #1a1a1a;
+            --brand-white: #ffffff;
+            --brand-gray: #f4f4f4;
+            --accent: #d1b894; /* Subtle gold/tan for a premium feel */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--brand-white);
+            color: var(--brand-black);
+            overflow-x: hidden;
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--brand-black);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .product-card img {
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+        .announcement-bar {
+            background-color: var(--brand-black);
+            color: white;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .btn-primary {
+            background-color: var(--brand-black);
+            color: white;
+            padding: 1rem 2.5rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        .btn-primary:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #eee;
+        }
+        /* Cart Drawer Animation */
+        #cart-drawer {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #cart-drawer.open {
+            transform: translateX(0);
+        }
+        .overlay {
+            display: none;
+            background: rgba(0,0,0,0.5);
+            position: fixed;
+            inset: 0;
+            z-index: 90;
+        }
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
 
+    <!-- Announcement Bar -->
+    <div class="announcement-bar py-2 text-center">
+        Free Shipping on all Canadian orders over $100
+    </div>
+
+    <!-- Header -->
+    <header class="sticky-header">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Mobile Menu Icon -->
+            <button class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></button>
+            </button>
+
+            <!-- Navigation (Desktop) -->
+            <nav class="hidden md:flex space-x-8 uppercase text-xs font-semibold tracking-widest">
+                <a href="#" class="nav-link">Shop All</a>
+                <a href="#" class="nav-link">New Arrivals</a>
+                <a href="#" class="nav-link">Collections</a>
+            </nav>
+
+            <!-- Logo -->
+            <div class="text-2xl font-bold tracking-tighter">
+                <a href="/">LB<span class="text-gray-400">TEES</span></a>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center space-x-5">
+                <a href="#" class="hover:opacity-60 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </a>
+                <button onclick="toggleCart()" class="hover:opacity-60 transition-opacity relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative h-[85vh] flex items-center overflow-hidden bg-gray-100">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=2000&auto=format&fit=crop" 
+                 class="w-full h-full object-cover object-center opacity-90" 
+                 alt="Hero Shirt">
+        </div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-xl">
+                <h2 class="text-white text-lg uppercase tracking-[0.3em] mb-4 drop-shadow-md">The 2024 Essentials</h2>
+                <h1 class="text-5xl md:text-7xl text-white mb-8 leading-tight drop-shadow-xl">Quality You Can Feel.</h1>
+                <div class="flex space-x-4">
+                    <a href="#shop" class="btn-primary bg-white text-black hover:bg-black hover:text-white">Shop Men</a>
+                    <a href="#shop" class="btn-primary bg-transparent border border-white text-white hover:bg-white hover:text-black">Shop Women</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Props -->
+    <section class="py-12 border-b">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+                <h4 class="font-bold text-sm uppercase tracking-widest mb-2">Ethically Made</h4>
+                <p class="text-gray-500 text-xs px-10">Produced in sustainable factories with fair wages for all workers.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm uppercase tracking-widest mb-2">Premium Cotton</h4>
+                <p class="text-gray-500 text-xs px-10">100% long-staple organic cotton for maximum durability and softness.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm uppercase tracking-widest mb-2">Flat Rate Shipping</h4>
+                <p class="text-gray-500 text-xs px-10">Simple, predictable shipping across North America.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section id="shop" class="py-20 container mx-auto px-6">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h3 class="text-3xl mb-2">Featured Collection</h3>
+                <p class="text-gray-400">Our community favorites</p>
+            </div>
+            <a href="#" class="text-sm font-semibold underline underline-offset-8">View All</a>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-6">
+            <!-- Product 1 -->
+            <div class="product-card group">
+                <div class="relative overflow-hidden aspect-[3/4] bg-gray-50 mb-4">
+                    <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=800&auto=format&fit=crop" alt="White Tee" class="w-full h-full object-cover">
+                    <button onclick="addToCart('Essential White Tee', 38)" class="absolute bottom-4 left-4 right-4 bg-white py-3 text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">Quick Add</button>
+                    <div class="absolute top-4 left-4 bg-black text-white px-2 py-1 text-[10px] uppercase font-bold tracking-tighter">Best Seller</div>
+                </div>
+                <h4 class="text-sm font-medium mb-1">Essential White Tee</h4>
+                <p class="text-gray-500 text-sm">$38.00</p>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card group">
+                <div class="relative overflow-hidden aspect-[3/4] bg-gray-50 mb-4">
+                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=800&auto=format&fit=crop" alt="Black Tee" class="w-full h-full object-cover">
+                    <button onclick="addToCart('Heavyweight Black Tee', 42)" class="absolute bottom-4 left-4 right-4 bg-white py-3 text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">Quick Add</button>
+                </div>
+                <h4 class="text-sm font-medium mb-1">Heavyweight Black Tee</h4>
+                <p class="text-gray-500 text-sm">$42.00</p>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card group">
+                <div class="relative overflow-hidden aspect-[3/4] bg-gray-50 mb-4">
+                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800&auto=format&fit=crop" alt="Vintage Tee" class="w-full h-full object-cover">
+                    <button onclick="addToCart('Vintage Gray Tee', 45)" class="absolute bottom-4 left-4 right-4 bg-white py-3 text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">Quick Add</button>
+                </div>
+                <h4 class="text-sm font-medium mb-1">Vintage Gray Tee</h4>
+                <p class="text-gray-500 text-sm">$45.00</p>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card group">
+                <div class="relative overflow-hidden aspect-[3/4] bg-gray-50 mb-4">
+                    <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=800&auto=format&fit=crop" alt="Boxy Fit" class="w-full h-full object-cover">
+                    <button onclick="addToCart('Boxy Fit Charcoal', 40)" class="absolute bottom-4 left-4 right-4 bg-white py-3 text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">Quick Add</button>
+                </div>
+                <h4 class="text-sm font-medium mb-1">Boxy Fit Charcoal</h4>
+                <p class="text-gray-500 text-sm">$40.00</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lifestyle Callout -->
+    <section class="py-20 bg-stone-100">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
+            <div class="order-2 md:order-1">
+                <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?q=80&w=1200&auto=format&fit=crop" alt="Lifestyle" class="rounded-lg shadow-2xl">
+            </div>
+            <div class="order-1 md:order-2 space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Our Story</span>
+                <h2 class="text-4xl md:text-5xl">Minimalism for the Modern Wardrobe.</h2>
+                <p class="text-gray-600 leading-relaxed">LB Tees was born out of a desire for the perfect t-shirt. No loud logos, no fast-fashion shortcuts—just incredible fabric, tailored fits, and a commitment to longevity.</p>
+                <a href="#" class="inline-block border-b-2 border-black pb-2 text-sm font-bold uppercase tracking-widest hover:text-gray-400 hover:border-gray-400 transition-all">Read our mission</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <h5 class="text-xl font-bold mb-6 italic serif">LB<span class="opacity-50">TEES</span></h5>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Redefining the basics for everyday life. Proudly based in Canada.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-gray-400 transition-colors">Instagram</a>
+                        <a href="#" class="hover:text-gray-400 transition-colors">TikTok</a>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="text-xs uppercase font-bold tracking-widest mb-6">Shop</h6>
+                    <ul class="text-gray-400 text-sm space-y-4">
+                        <li><a href="#" class="hover:text-white transition-colors">All Products</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Bundles</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Gift Cards</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Wholesale</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="text-xs uppercase font-bold tracking-widest mb-6">Support</h6>
+                    <ul class="text-gray-400 text-sm space-y-4">
+                        <li><a href="#" class="hover:text-white transition-colors">Track Order</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Shipping Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Returns & Exchanges</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="text-xs uppercase font-bold tracking-widest mb-6">Newsletter</h6>
+                    <p class="text-gray-400 text-sm mb-4">Join for early access to drops and exclusive offers.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Email address" class="bg-transparent border-b border-gray-700 py-2 w-full focus:outline-none focus:border-white transition-colors text-sm">
+                        <button class="border-b border-gray-700 px-4 hover:text-gray-400 uppercase text-[10px] font-bold">Join</button>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-10 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-500 uppercase tracking-widest">
+                <p>&copy; 2024 LB Tees. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 flex space-x-6">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div id="cart-overlay" class="overlay" onclick="toggleCart()"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-sm bg-white z-[100] shadow-2xl flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center">
+            <h3 class="text-xl font-bold uppercase tracking-tight">Your Cart</h3>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-black">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+        
+        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-6">
+            <!-- Items injected here -->
+            <p id="empty-cart-msg" class="text-center text-gray-400 mt-20">Your cart is empty</p>
+        </div>
+
+        <div class="p-6 border-t bg-gray-50">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-sm font-semibold uppercase tracking-widest">Subtotal</span>
+                <span id="cart-total" class="text-lg font-bold">$0.00</span>
+            </div>
+            <p class="text-[10px] text-gray-400 mb-6 uppercase tracking-wider">Shipping & taxes calculated at checkout</p>
+            <button class="w-full btn-primary py-4">Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const cartItemsDiv = document.getElementById('cart-items');
+        const emptyMsg = document.getElementById('empty-cart-msg');
+        const totalSpan = document.getElementById('cart-total');
+        const countSpan = document.getElementById('cart-count');
+
+        function toggleCart() {
+            cartDrawer.classList.toggle('open');
+            cartOverlay.classList.toggle('active');
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price, id: Date.now() });
+            updateCart();
+            if (!cartDrawer.classList.contains('open')) {
+                toggleCart();
+            }
+        }
+
+        function updateCart() {
+            cartItemsDiv.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItemsDiv.appendChild(emptyMsg);
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'flex justify-between items-start';
+                    itemEl.innerHTML = `
+                        <div>
+                            <h5 class="text-sm font-bold uppercase tracking-tighter">${item.name}</h5>
+                            <p class="text-xs text-gray-400 mt-1">Size: One Size</p>
+                            <button onclick="removeFromCart(${index})" class="text-[10px] uppercase text-red-400 mt-2 font-bold hover:underline">Remove</button>
+                        </div>
+                        <span class="text-sm font-semibold">$${item.price.toFixed(2)}</span>
+                    `;
+                    cartItemsDiv.appendChild(itemEl);
+                });
+            }
+
+            totalSpan.innerText = `$${total.toFixed(2)}`;
+            countSpan.innerText = cart.length;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        // Custom smooth scroll for links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
